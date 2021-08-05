@@ -10,8 +10,8 @@ class ProductModule extends ChildModule {
   List<Bind> get binds => [
     Bind((i) => GraphQlAdapter()),
     Bind((i) => ProductsRepositoryGraphQL(i.get<GraphQlAdapter>())),
-    Bind((i) => BuyProduct(i.get<ProductsRepositoryGraphQL>())),
-    Bind((i) => ProductController(i.get<BuyProduct>())),
+    Bind<IBuyProduct>((i) => BuyProduct(i.get<ProductsRepositoryGraphQL>())),
+    $ProductController
   ];
 
   @override

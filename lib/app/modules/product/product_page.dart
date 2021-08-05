@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:numarket/app/app_controller.dart';
 import 'package:numarket/app/app_module.dart';
+import 'package:numarket/app/modules/product/components/buy_button.dart';
 import 'package:numarket/core/domain/usecases/buy_product.dart';
 import 'product_controller.dart';
 
@@ -16,47 +17,42 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends ModularState<ProductPage, ProductController> {
-  AppController _appController;
   final List<ReactionDisposer> _disposers = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _appController = AppModule.to.get<AppController>();
-    controller.loadOffer(customer: _appController.user, productId: widget.id);
+    controller.loadOffer(productId: widget.id);
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _disposers.forEach((disposer) => disposer());
     super.dispose();
   }
 
   @override
-  void didChangeDependencies(){
+  void didChangeDependencies() {
     super.didChangeDependencies();
     _disposers.add(
       reaction(
-            (_) => controller.purchaseResult,
-            (_)  {
-              if(controller.purchaseResult is PurchaseResultFailed){
-                PurchaseResultFailed purchaseResultFailed = controller.purchaseResult;
-                _scaffoldKey.currentState.showSnackBar(
-                    SnackBar(
-                      content: Text(purchaseResultFailed.message),
-                      backgroundColor: Colors.red,
-                      duration: Duration(seconds: 3),
-                    ));
-              }else if (controller.purchaseResult is PurchaseResultSuccess){
-                PurchaseResultSuccess purchaseResultSuccess = controller.purchaseResult;
-                _appController.user = purchaseResultSuccess.customer;
-                return Navigator.of(context).pop();
-              }
-            },
+        (_) => controller.purchaseResult,
+        (_) {
+          if (controller.purchaseResult is PurchaseResultFailed) {
+            showPurchaseFailed(controller.purchaseResult);
+            return;
+          }
+          if (controller.purchaseResult is PurchaseResultSuccess) {
+            showPurchaseSuccess();
+            Future.delayed(
+                Duration(seconds: 2), () => Navigator.of(context).pop());
+            return;
+          }
+        },
       ),
     );
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +80,9 @@ class _ProductPageState extends ModularState<ProductPage, ProductController> {
                   children: [
                     Expanded(
                         child: Image.network(
-                          controller.product.image,
-                          width: MediaQuery.of(context).size.width,
-                        )),
+                      controller.product.image,
+                      width: MediaQuery.of(context).size.width,
+                    )),
                     Flexible(
                       child: Container(
                         margin: EdgeInsets.all(5),
@@ -117,21 +113,10 @@ class _ProductPageState extends ModularState<ProductPage, ProductController> {
               Container(
                 alignment: Alignment.bottomCenter,
                 margin: EdgeInsets.only(bottom: 20),
-                child: RaisedButton(
-                  onPressed: controller.purchaseProcess ? null : () {
-                    controller.buy();
-                  },
-                  color: Colors.purple,
-                  elevation: 3,
-                  textColor: Colors.white,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.shopping_cart, size: 25,),
-                      Text("Comprar",style: TextStyle(fontSize: 17),)
-                    ],
-                  ),
-                ),
+                child: BuyButton(
+                    onPressed: controller.purchaseProcess
+                        ? null
+                        : () => controller.buy()),
               )
             ],
           );
@@ -139,4 +124,21 @@ class _ProductPageState extends ModularState<ProductPage, ProductController> {
       ),
     );
   }
+
+  void showPurchaseFailed(PurchaseResultFailed purchaseResult){
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(purchaseResult.message),
+      backgroundColor: Colors.red,
+      duration: Duration(seconds: 2),
+    ));
+  }
+
+  void showPurchaseSuccess(){
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Compra Feita com sucesso"),
+      backgroundColor: Colors.green,
+      duration: Duration(seconds: 2),
+    ));
+  }
+
 }

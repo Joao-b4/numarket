@@ -1,3 +1,4 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:numarket/core/domain/entities/user.dart';
@@ -10,7 +11,7 @@ class AppController = _AppControllerBase with _$AppController;
 abstract class _AppControllerBase with Store {
    final IGetUser _usecaseGetUser;
   _AppControllerBase(this._usecaseGetUser){
-    _loadUser();
+    loadUser();
   }
 
   @observable
@@ -19,10 +20,20 @@ abstract class _AppControllerBase with Store {
   @computed
   bool get loading => user == null;
 
-  _loadUser() async {
+  @observable
+  String error;
+
+  @action
+  loadUser() async {
+    error = null;
+    if(!(await DataConnectionChecker().hasConnection)){
+      return error = "Sem Conexão";
+    }
     final result = await _usecaseGetUser();
     if (result.isRight()) {
       user = result.getOrElse(null);
+    }else{
+      error = "Erro Ao Sincronizar Usuario :(";
     }
   }
 

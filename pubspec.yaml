@@ -26,6 +26,7 @@ dependencies:
   mobx: any
   flutter_modular: any
   graphql: any
+  data_connection_checker: any
 
 dev_dependencies:
   mockito: any

@@ -1,11 +1,10 @@
 import 'dart:ui';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:numarket/app/app_controller.dart';
-import 'package:numarket/app/app_module.dart';
-import 'package:numarket/core/domain/entities/product.dart';
+import 'package:numarket/app/pages/home/components/product_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -15,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, AppController> {
-
   bool _obscureBalance;
 
   @override
@@ -27,9 +25,27 @@ class _HomePageState extends ModularState<HomePage, AppController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.purple,
         body: Observer(
           builder: (_) {
+            if(controller.error != null){
+              return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(controller.error,style: TextStyle(
+                          color: Colors.white
+                      ),),
+                      RaisedButton(
+                        child: Text("Tentar Novamente"),
+                        onPressed: (){
+                          controller.loadUser();
+                        },
+                      )
+                    ],
+                  )
+              );
+            }
             if (controller.loading) {
               return Center(
                   child: CircularProgressIndicator(
@@ -76,17 +92,24 @@ class _HomePageState extends ModularState<HomePage, AppController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(icon: Icon(_obscureBalance ? Icons.visibility_off : Icons.visibility, color: Colors.white, ), onPressed: (){
-                          setState(() {
-                            _obscureBalance = !_obscureBalance;
-                          });
-                        }),
-                        Text("R\$ ${_obscureBalance ? "" : controller.user.balance }",
+                        IconButton(
+                            icon: Icon(
+                              _obscureBalance
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureBalance = !_obscureBalance;
+                              });
+                            }),
+                        Text(
+                          "R\$ ${_obscureBalance ? "" : controller.user.balance}",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 15
-                          ),
+                              fontSize: 15),
                         )
                       ],
                     ),
@@ -98,10 +121,15 @@ class _HomePageState extends ModularState<HomePage, AppController> {
                     elevation: 5,
                     margin: EdgeInsets.zero,
                     child: ListView.builder(
+                      padding: EdgeInsets.zero,
                       shrinkWrap: true,
                       itemCount: controller.user.offers.length,
                       itemBuilder: (BuildContext context, int productIndex) =>
-                          wProductTile(controller.user.offers[productIndex]),
+                          ProductTile(
+                        product: controller.user.offers[productIndex],
+                        onTap: () => Modular.to.pushNamed("/product",
+                            arguments: controller.user.offers[productIndex].id),
+                      ),
                     ),
                   ),
                 ],
@@ -109,20 +137,5 @@ class _HomePageState extends ModularState<HomePage, AppController> {
             );
           },
         ));
-  }
-
-  Widget wProductTile(Product currentProduct) {
-    return ListTile(
-      onTap: () {
-        Modular.to.pushNamed("/product", arguments: currentProduct.id);
-      },
-      title: Text(currentProduct.name),
-      leading: Image.network(
-        currentProduct.image,
-        width: 40,
-        height: 40,
-      ),
-      subtitle: Text("R\$ ${currentProduct.price}"),
-    );
   }
 }

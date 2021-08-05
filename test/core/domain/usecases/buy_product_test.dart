@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:numarket/core/domain/entities/product.dart';
-import 'package:numarket/core/domain/entities/user.dart';
 import 'package:numarket/core/domain/repositories/products_repository_interface.dart';
 import 'package:numarket/core/domain/usecases/buy_product.dart';
+import '../../../utils/purchase_result_mock.dart';
 
 class ProductsRepositoryMock extends Mock implements IProductsRepository{}
 
@@ -15,12 +15,12 @@ void main() {
   group('BuyProduct usecase', () {
     test("should return an instance of PurchaseResultSuccess", () async{
       Product product = new Product();
-      when(repository.buy(product)).thenAnswer((_) async => Right(PurchaseResultSuccess(User())));
+      when(repository.buy(product)).thenAnswer((_) async => Right(purchaseResultSuccessMock));
 
       final result = await usecase(product);
 
       expect(result.isRight(), true);
-      expect(result | null, isA<PurchaseResultSuccess>());
+      expect(result.getOrElse(null), equals(purchaseResultSuccessMock));
     });
 
     test("should return PurchaseResultFailed if repository fails", ()async {

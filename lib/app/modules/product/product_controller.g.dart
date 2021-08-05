@@ -106,11 +106,11 @@ mixin _$ProductController on _ProductControllerBase, Store {
       ActionController(name: '_ProductControllerBase');
 
   @override
-  dynamic loadOffer({User customer, String productId}) {
+  dynamic loadOffer({String productId}) {
     final _$actionInfo = _$_ProductControllerBaseActionController.startAction(
         name: '_ProductControllerBase.loadOffer');
     try {
-      return super.loadOffer(customer: customer, productId: productId);
+      return super.loadOffer(productId: productId);
     } finally {
       _$_ProductControllerBaseActionController.endAction(_$actionInfo);
     }

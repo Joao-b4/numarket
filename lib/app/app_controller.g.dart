@@ -41,10 +41,33 @@ mixin _$AppController on _AppControllerBase, Store {
     });
   }
 
+  final _$errorAtom = Atom(name: '_AppControllerBase.error');
+
+  @override
+  String get error {
+    _$errorAtom.reportRead();
+    return super.error;
+  }
+
+  @override
+  set error(String value) {
+    _$errorAtom.reportWrite(value, super.error, () {
+      super.error = value;
+    });
+  }
+
+  final _$loadUserAsyncAction = AsyncAction('_AppControllerBase.loadUser');
+
+  @override
+  Future loadUser() {
+    return _$loadUserAsyncAction.run(() => super.loadUser());
+  }
+
   @override
   String toString() {
     return '''
 user: ${user},
+error: ${error},
 loading: ${loading}
     ''';
   }

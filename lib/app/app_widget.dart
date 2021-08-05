@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:numarket/app/pages/home/home_page.dart';
 
 class AppWidget extends StatelessWidget {
   @override
@@ -8,7 +7,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       title: 'Nu Market',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+        primarySwatch: Colors.purple,
       ),
       debugShowCheckedModeBanner: false,
       navigatorKey: Modular.navigatorKey,

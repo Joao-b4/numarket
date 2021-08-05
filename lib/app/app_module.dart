@@ -13,8 +13,8 @@ class AppModule extends MainModule {
   List<Bind> get binds => [
         Bind((i) => GraphQlAdapter()),
         Bind((i) => UsersRepositoryGraphQL(i.get<GraphQlAdapter>())),
-        Bind((i) => GetUser(i.get<UsersRepositoryGraphQL>())),
-        Bind((i) => AppController(i.get<GetUser>())),
+        Bind<IGetUser>((i) => GetUser(i.get<UsersRepositoryGraphQL>())),
+        $AppController
       ];
 
   @override
