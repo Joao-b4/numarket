@@ -1,0 +1,14 @@
+{
+  "noConnection": "Sem conexão",
+  "syncUserError": "Erro ao sincronizar usuário :(",
+  "tryAgain": "Tentar novamente",
+  "moneySign" : "R$",
+  "buy" : "Comprar",
+  "errorToLoadProduct": "Erro ao carregar produto",
+  "purchaseSuccess": "Compra realizada com sucesso",
+  "productIdNotInformed": "Id do produto não informado",
+  "productNotFound": "Produto não encontrado",
+  "Offer expired": "Oferta expirada",
+  "You don't have that much money.": "Saldo insuficiente",
+  "purchaseNotMade": "Compra não realizada"
+}

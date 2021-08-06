@@ -19,13 +19,6 @@ final $ProductController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ProductController on _ProductControllerBase, Store {
-  Computed<Product> _$productComputed;
-
-  @override
-  Product get product =>
-      (_$productComputed ??= Computed<Product>(() => super.product,
-              name: '_ProductControllerBase.product'))
-          .value;
   Computed<bool> _$loadingComputed;
 
   @override
@@ -33,33 +26,33 @@ mixin _$ProductController on _ProductControllerBase, Store {
           name: '_ProductControllerBase.loading'))
       .value;
 
-  final _$_customerAtom = Atom(name: '_ProductControllerBase._customer');
+  final _$customerAtom = Atom(name: '_ProductControllerBase.customer');
 
   @override
-  User get _customer {
-    _$_customerAtom.reportRead();
-    return super._customer;
+  User get customer {
+    _$customerAtom.reportRead();
+    return super.customer;
   }
 
   @override
-  set _customer(User value) {
-    _$_customerAtom.reportWrite(value, super._customer, () {
-      super._customer = value;
+  set customer(User value) {
+    _$customerAtom.reportWrite(value, super.customer, () {
+      super.customer = value;
     });
   }
 
-  final _$productIdAtom = Atom(name: '_ProductControllerBase.productId');
+  final _$productAtom = Atom(name: '_ProductControllerBase.product');
 
   @override
-  String get productId {
-    _$productIdAtom.reportRead();
-    return super.productId;
+  Product get product {
+    _$productAtom.reportRead();
+    return super.product;
   }
 
   @override
-  set productId(String value) {
-    _$productIdAtom.reportWrite(value, super.productId, () {
-      super.productId = value;
+  set product(Product value) {
+    _$productAtom.reportWrite(value, super.product, () {
+      super.product = value;
     });
   }
 
@@ -95,6 +88,21 @@ mixin _$ProductController on _ProductControllerBase, Store {
     });
   }
 
+  final _$errorAtom = Atom(name: '_ProductControllerBase.error');
+
+  @override
+  String get error {
+    _$errorAtom.reportRead();
+    return super.error;
+  }
+
+  @override
+  set error(String value) {
+    _$errorAtom.reportWrite(value, super.error, () {
+      super.error = value;
+    });
+  }
+
   final _$buyAsyncAction = AsyncAction('_ProductControllerBase.buy');
 
   @override
@@ -119,10 +127,11 @@ mixin _$ProductController on _ProductControllerBase, Store {
   @override
   String toString() {
     return '''
-productId: ${productId},
+customer: ${customer},
+product: ${product},
 purchaseResult: ${purchaseResult},
 purchaseProcess: ${purchaseProcess},
-product: ${product},
+error: ${error},
 loading: ${loading}
     ''';
   }

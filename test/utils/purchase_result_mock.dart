@@ -20,7 +20,7 @@ final purchaseResultSuccessMock = PurchaseResultSuccess(User(
 
 final purchaseResultFailedMock = PurchaseResultFailed("500");
 
-const resultPurchaseFailedMock = {
+const PurchaseResultFailedFromGraphqlMock  = {
   "purchase": {
     "success": false,
     "errorMessage": "You don't have that much money.",
@@ -31,7 +31,8 @@ const resultPurchaseFailedMock = {
     }
   }
 };
-const resultPurchaseSuccessMock = {
+
+const PurchaseResultSuccessFromGraphqlMock = {
   "purchase": {
     "success": true,
     "errorMessage": null,

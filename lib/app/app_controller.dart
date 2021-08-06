@@ -27,13 +27,17 @@ abstract class _AppControllerBase with Store {
   loadUser() async {
     error = null;
     if(!(await DataConnectionChecker().hasConnection)){
-      return error = "Sem Conexão";
+      return error = "noConnection";
     }
-    final result = await _usecaseGetUser();
-    if (result.isRight()) {
-      user = result.getOrElse(null);
-    }else{
-      error = "Erro Ao Sincronizar Usuario :(";
+    try{
+      final result = await _usecaseGetUser();
+      if (result.isRight()) {
+        user = result.getOrElse(null);
+      }else{
+        error = "syncUserError";
+      }
+    }catch(e){
+      error = "syncUserError";
     }
   }
 

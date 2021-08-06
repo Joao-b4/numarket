@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:numarket/core/domain/entities/product.dart';
 import 'package:numarket/core/domain/entities/user.dart';
-import 'package:numarket/core/domain/errors/user_errors.dart';
 import 'package:numarket/core/domain/repositories/products_repository_interface.dart';
 
 abstract class PurchaseResult{}

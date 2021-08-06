@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numarket/app/config/AppLocalizations.dart';
 import 'package:numarket/core/domain/entities/product.dart';
 
 class ProductTile extends StatelessWidget {
@@ -17,7 +18,7 @@ class ProductTile extends StatelessWidget {
         width: 40,
         height: 40,
       ),
-      subtitle: Text("R\$ ${product.price}"),
+      subtitle: Text("${AppLocalizations.of(context).translate('moneySign')} ${product.price}"),
     );
   }
 }

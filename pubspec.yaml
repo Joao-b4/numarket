@@ -13,14 +13,15 @@ scripts:
   mobx_watch: $clean & $get & $runner watch
   mobx_build_clean: $clean & $get & $runner build --delete-conflicting-outputs
 
-
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.0
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: any
   dartz: any
   flutter_mobx: any
   mobx: any
@@ -41,3 +42,5 @@ flutter:
 
   assets:
     - assets/img/nubank-logo.png
+    - i18n/en.json
+    - i18n/pt-br.json

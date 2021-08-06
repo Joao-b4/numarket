@@ -15,17 +15,24 @@ void main() {
 
   group('UsersRepository GraphQlImpl', () {
     test("should return an instance of user", () async{
-      when(adapter.runQuery(any)).thenAnswer((_) async => ResultGetUserMock);
+      when(adapter.runQuery(any)).thenAnswer((_) async => ResultGetUserMockFromGraphqlMock);
 
       final result = await repository.getCurrentUser();
 
       expect(result, isA<Right>());
+      expect(result.fold(id,id), isA<User>());
       User userResult = result.getOrElse(null);
       expect(userResult.id, userMock.id);
     });
 
-    test("should return an SyncUserAccountError if result is not CustomerModel", () async{
+    test("should return SyncUserAccountError if result is empty", () async{
       when(adapter.runQuery(any)).thenAnswer((_) async => {});
+      final result = await repository.getCurrentUser();
+      expect(result.fold(id,id), isA<SyncUserAccountError>());
+    });
+
+    test("should return SyncUserAccountError if result is exception", () async{
+      when(adapter.runQuery(any)).thenThrow((_) async => Exception());
       final result = await repository.getCurrentUser();
       expect(result.fold(id,id), isA<SyncUserAccountError>());
     });

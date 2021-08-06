@@ -23,9 +23,19 @@ void main() {
       expect(result.getOrElse(null), equals(purchaseResultSuccessMock));
     });
 
-    test("should return PurchaseResultFailed if repository fails", ()async {
+    test("should return an instance of PurchaseResultFailed", () async{
       Product product = new Product();
-      when(repository.buy(product)).thenThrow((_) async => Exception);
+      when(repository.buy(product)).thenAnswer((_) async => Left(purchaseResultFailedMock));
+
+      final result = await usecase(product);
+
+      expect(result.isLeft(), true);
+      expect(result.fold(id,id), isA<PurchaseResultFailed>());
+    });
+
+    test("should return PurchaseResultFailed if repository failed", ()async {
+      Product product = new Product();
+      when(repository.buy(product)).thenThrow((_) async => Exception());
 
       final result = await usecase(product);
 

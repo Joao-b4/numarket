@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numarket/app/config/AppLocalizations.dart';
 
 class BuyButton extends StatelessWidget {
   final Function onPressed;
@@ -20,7 +21,7 @@ class BuyButton extends StatelessWidget {
             size: 25,
           ),
           Text(
-            "Comprar",
+            AppLocalizations.of(context).translate('buy'),
             style: TextStyle(fontSize: 17),
           )
         ],

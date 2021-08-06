@@ -22,8 +22,17 @@ void main() {
       expect(result.getOrElse(null), equals(userMock));
     });
 
-    test("should return SyncUserAccountError if repository fails", ()async {
-      when(repository.getCurrentUser()).thenThrow((_) async => Exception);
+    test("should return an instance of SyncUserAccountError", () async{
+      when(repository.getCurrentUser()).thenAnswer((_) async => Left(SyncUserAccountError()));
+
+      final result = await usecase();
+
+      expect(result.isLeft(), true);
+      expect(result.fold(id,id), isA<SyncUserAccountError>());
+    });
+
+    test("should return SyncUserAccountError if repository failed", ()async {
+      when(repository.getCurrentUser()).thenThrow((_) async => Exception());
 
       final result = await usecase();
 

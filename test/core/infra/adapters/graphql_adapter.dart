@@ -12,10 +12,6 @@ void main() {
   adapter.client = gqlMock;
 
   group('GraphQL Adapter', () {
-    test("should return an instance of IGraphQLAdapter", () async{
-      expect(adapter, isA<IGraphQlAdapter>());
-    });
-
     test("should return Map if runQuery is successful", ()async {
       when(gqlMock.query(any)).thenAnswer((_) async=> QueryResult(data: {}));
       final result = await adapter.runQuery("");

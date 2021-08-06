@@ -16,17 +16,11 @@ abstract class _ProductControllerBase with Store {
   _ProductControllerBase(this._usecaseBuyProduct);
 
   @observable
-  User _customer;
+  User customer;
+
 
   @observable
-  String productId;
-
-  @computed
-  Product get product  {
-    if(_customer != null && productId != null){
-      return _customer.offers.firstWhere((product) => product.id == productId);
-    }
-  }
+  Product product;
 
   @computed
   bool get loading => product == null;
@@ -39,30 +33,47 @@ abstract class _ProductControllerBase with Store {
 
   AppController _appController;
 
+  @observable
+  String error;
+
   @action
-  loadOffer({String productId}){
-    _appController = AppModule.to.get<AppController>();
-    this._customer = _appController.user;
-    this.productId = productId;
+  loadOffer({String productId}) {
+    error = null;
+    try{
+      if(productId == null || productId.isEmpty){
+        return error = "productIdNotInformed";
+      }
+      _appController = AppModule.to.get<AppController>();
+      customer = _appController.user;
+      if (customer != null && productId != null) {
+        Product productFound = customer.offers.firstWhere((product) => product.id == productId);
+        if(productFound != null){
+          product = productFound;
+        }else{
+          error = "productNotFound";
+        }
+      }
+    }catch(e){
+      error = "errorToLoadProduct";
+    }
   }
 
   @action
-  buy() async{
+  buy() async {
     purchaseProcess = true;
-    if(!(await DataConnectionChecker().hasConnection)){
-       purchaseResult = PurchaseResultFailed('Sem Conexão');
+    if (!(await DataConnectionChecker().hasConnection)) {
+      purchaseResult = PurchaseResultFailed('noConnection');
       purchaseProcess = false;
-       return;
+      return;
     }
     final result = await _usecaseBuyProduct(product);
-    result.fold((PurchaseResultFailed failed){
+    result.fold((PurchaseResultFailed failed) {
       purchaseResult = failed;
     }, (PurchaseResultSuccess success) {
       purchaseResult = success;
-      _customer = success.customer;
+      customer = success.customer;
       _appController.user = success.customer;
     });
     purchaseProcess = false;
   }
 }
-

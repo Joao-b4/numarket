@@ -1,0 +1,15 @@
+{
+  "noConnection": "No connection",
+  "syncUserError": "Error syncing user:(",
+  "tryAgain": "Try again",
+  "moneySign" : "$",
+  "buy" : "Buy",
+  "errorToLoadProduct": "Error loading product",
+  "purchaseSuccess": "Purchase made successfully",
+  "productIdNotInformed": "Product id not informed",
+  "productNotFound": "Product not found",
+  "Offer expired": "Offer expired",
+  "You don't have that much money.": "Insufficient funds",
+  "purchaseNotMade": "Purchase not made"
+
+}

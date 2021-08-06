@@ -27,12 +27,12 @@ void main() {
       Bind<IBuyProduct>((i) => usecaseBuyProduct)
     ]);
     when(usecaseGetUser.call()).thenAnswer((_) async => dartz.Right(userMock));
-    final AppController appController= AppModule.to.get<AppController>();
+    final AppController appController = AppModule.to.get<AppController>();
     await appController.loadUser();
   });
 
   group('ProductController Test', () {
-    test("should return an instance of PurchaseResultSuccess", () async {
+    test("purchaseResult must should an instance of PurchaseResultSuccess", () async {
       when(usecaseBuyProduct.call(any)).thenAnswer((_) async => dartz.Right(purchaseResultSuccessMock));
 
       final ProductController controller = ProductModule.to.get<ProductController>();
@@ -41,12 +41,24 @@ void main() {
       expect(controller.purchaseResult, purchaseResultSuccessMock);
     });
 
-    test("should return an instance of PurchaseResultFailed", () async {
+    test("purchaseResult must should an instance of PurchaseResultFailed", () async {
       when(usecaseBuyProduct.call(any)).thenAnswer((_) async => dartz.Left(purchaseResultFailedMock));
       final ProductController controller = ProductModule.to.get<ProductController>();
       controller.loadOffer(productId: userMock.offers[0].id);
       await controller.buy();
       expect(controller.purchaseResult, purchaseResultFailedMock);
+    });
+
+    test("error should not be null if productId is null", () async {
+      final ProductController controller = ProductModule.to.get<ProductController>();
+      controller.loadOffer(productId: null);
+      expect(controller.error, isNot(equals(null)));
+    });
+
+    test("error should not be null if product Id does not exist", () async {
+      final ProductController controller = ProductModule.to.get<ProductController>();
+      controller.loadOffer(productId: 'xyz');
+      expect(controller.error, isNot(equals(null)));
     });
   });
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:numarket/app/app_controller.dart';
+import 'package:numarket/app/config/AppLocalizations.dart';
 import 'package:numarket/app/pages/home/components/product_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -37,7 +38,7 @@ class _HomePageState extends ModularState<HomePage, AppController> {
                           color: Colors.white
                       ),),
                       RaisedButton(
-                        child: Text("Tentar Novamente"),
+                        child: Text(AppLocalizations.of(context).translate('tryAgain')),
                         onPressed: (){
                           controller.loadUser();
                         },
@@ -46,6 +47,7 @@ class _HomePageState extends ModularState<HomePage, AppController> {
                   )
               );
             }
+
             if (controller.loading) {
               return Center(
                   child: CircularProgressIndicator(
@@ -105,7 +107,7 @@ class _HomePageState extends ModularState<HomePage, AppController> {
                               });
                             }),
                         Text(
-                          "R\$ ${_obscureBalance ? "" : controller.user.balance}",
+                          "${AppLocalizations.of(context).translate('moneySign')} ${_obscureBalance ? "" : controller.user.balance}",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

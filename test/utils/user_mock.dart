@@ -15,7 +15,7 @@ final userMock = User(
           price: 5000)
     ]);
 
-const ResultGetUserMock = {"viewer": {
+const ResultGetUserMockFromGraphqlMock= {"viewer": {
   "name": "Jerry Smith",
   "balance": 1000000,
   "id": "cccc3f48-dd2c-43ba-b8de-8945e7ababab",

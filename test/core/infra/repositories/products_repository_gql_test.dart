@@ -15,8 +15,8 @@ void main() {
   final repository = ProductsRepositoryGraphQL(adapter);
 
   group('ProductsRepository GraphQlImpl', () {
-    test("should return an PurchaseResultSuccess if purchase is successful", () async {
-      when(adapter.runMutation(any)).thenAnswer((_) async => resultPurchaseSuccessMock);
+    test("should return PurchaseResultSuccess if purchase is successful", () async {
+      when(adapter.runMutation(any)).thenAnswer((_) async => PurchaseResultSuccessFromGraphqlMock);
       final product = Product(offerId: "offer/portal-gun");
       final result = await repository.buy(product);
       expect(result, isA<Right>());
@@ -24,16 +24,22 @@ void main() {
       expect(purchaseResult.customer.balance, purchaseResultSuccessMock.customer.balance);
     });
 
-    test("should return an PurchaseResultFailed if result is failed", () async{
-      when(adapter.runMutation(any)).thenAnswer((_) async => resultPurchaseFailedMock);
+    test("should return PurchaseResultFailed if product is null", () async{
+      final result = await repository.buy(null);
+      expect(result.fold(id,id), isA<PurchaseResultFailed>());
+    });
+
+    test("should return PurchaseResultFailed if result is failed", () async{
+      when(adapter.runMutation(any)).thenAnswer((_) async => PurchaseResultFailedFromGraphqlMock);
       final product = Product();
       final result = await repository.buy(product);
       expect(result.fold(id,id), isA<PurchaseResultFailed>());
     });
 
-    test("should return an PurchaseResultFailed if product is null", () async{
-      when(adapter.runMutation(any)).thenAnswer((_) async => resultPurchaseFailedMock);
-      final result = await repository.buy(null);
+    test("should return PurchaseResultFailed if result is exception", () async{
+      when(adapter.runMutation(any)).thenThrow((_) async => Exception());
+      final product = Product();
+      final result = await repository.buy(product);
       expect(result.fold(id,id), isA<PurchaseResultFailed>());
     });
 

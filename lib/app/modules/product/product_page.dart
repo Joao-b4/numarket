@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:numarket/app/app_controller.dart';
-import 'package:numarket/app/app_module.dart';
+import 'package:numarket/app/config/AppLocalizations.dart';
 import 'package:numarket/app/modules/product/components/buy_button.dart';
 import 'package:numarket/core/domain/usecases/buy_product.dart';
 import 'product_controller.dart';
@@ -59,10 +58,19 @@ class _ProductPageState extends ModularState<ProductPage, ProductController> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Observer(builder: (_) => Text("${controller.product.name}")),
+        title: Observer(builder: (_) => Text("${controller.product?.name ?? "" }")),
       ),
       body: Observer(
         builder: (_) {
+          if (controller.error != null) {
+            return Center(
+              child: Text(
+                controller.error,
+                style: TextStyle(color: Colors.purple),
+              ),
+            );
+          }
+
           if (controller.loading) {
             return Center(
                 child: CircularProgressIndicator(
@@ -112,7 +120,7 @@ class _ProductPageState extends ModularState<ProductPage, ProductController> {
               ),
               Container(
                 alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.only(bottom: 20),
+                margin: EdgeInsets.only(bottom: 35),
                 child: BuyButton(
                     onPressed: controller.purchaseProcess
                         ? null
@@ -125,20 +133,19 @@ class _ProductPageState extends ModularState<ProductPage, ProductController> {
     );
   }
 
-  void showPurchaseFailed(PurchaseResultFailed purchaseResult){
+  void showPurchaseFailed(PurchaseResultFailed purchaseResult) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text(purchaseResult.message),
+      content: Text(AppLocalizations.of(context).translate(purchaseResult.message) ?? AppLocalizations.of(context).translate('purchaseNotMade') ),
       backgroundColor: Colors.red,
       duration: Duration(seconds: 2),
     ));
   }
 
-  void showPurchaseSuccess(){
+  void showPurchaseSuccess() {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Compra Feita com sucesso"),
+      content: Text(AppLocalizations.of(context).translate('purchaseSuccess')),
       backgroundColor: Colors.green,
       duration: Duration(seconds: 2),
     ));
   }
-
 }
