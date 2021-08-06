@@ -1,16 +1,45 @@
-# numarket
+> # numarket
 
 Flutter app for Nubank test
 
-## Getting Started
+> ## Usage
+#### Installation
+```bash
+$ flutter pub get
+```
+#### Run tests
+```bash
+$ flutter test
+```
+#### Run app in device
+```bash
+$ flutter run
+```
+### Development
+#### Build stores
+```bash
+$ flutter packages pub run build_runner watch --delete-conflicting-outputs
+```
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+> ## Principles
+* Single Responsibility Principle (SRP)
+* Open Closed Principle (OCP)
+* Liskov Substitution Principle (LSP)
+* Interface Segregation Principle (ISP)
+* Dependency Inversion Principle (DIP)
+* Separation of Concerns (SOC)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+> ## Design Patterns
+* Factory
+* Adapter
+* Dependency Injection
+* Singleton
+* Functional reactive programming (FRP) 
+* Functional Error Handling (FEH)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+> ## Methodologies and Designs
+* TDD
+* Clean Architecture
+* DDD
+* Modular Design
