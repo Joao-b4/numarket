@@ -8,8 +8,8 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       supportedLocales: [
-        Locale('en', 'US'),
-        Locale('ar', ''),
+        const Locale('en',''),
+        const Locale('pt',''),
       ],
       localizationsDelegates: [
         AppLocalizations.delegate,

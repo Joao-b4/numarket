@@ -43,4 +43,4 @@ flutter:
   assets:
     - assets/img/nubank-logo.png
     - i18n/en.json
-    - i18n/pt-br.json
+    - i18n/pt.json
