@@ -39,7 +39,13 @@ class _ProductPageState extends ModularState<ProductPage, ProductController> {
         (_) => controller.purchaseResult,
         (_) {
           if (controller.purchaseResult is PurchaseResultFailed) {
-            showPurchaseFailed(controller.purchaseResult);
+           final purchaseResultFailed =  controller.purchaseResult as PurchaseResultFailed;
+            showModal(context, title: "Tentar novamente", content: purchaseResultFailed.message, onCancel:   (){
+              Navigator.of(context).pop();
+            }, onSuccess:    () {
+              Navigator.of(context).pop();
+              controller.buy();
+            }, textActionCancel: "cancelar", textActionSuccess: "comprar");
             return;
           }
           if (controller.purchaseResult is PurchaseResultSuccess) {
@@ -124,13 +130,30 @@ class _ProductPageState extends ModularState<ProductPage, ProductController> {
                 child: BuyButton(
                     onPressed: controller.purchaseProcess
                         ? null
-                        : () => controller.buy()),
+                        : () => showModal(context, title: "Confirmar compra", onCancel:   (){
+                      Navigator.of(context).pop();
+                    }, onSuccess:    () {
+                      Navigator.of(context).pop();
+                      controller.buy();
+                    }, textActionCancel: "cancelar", textActionSuccess: "comprar") ),
               )
             ],
           );
         },
       ),
     );
+  }
+
+  void showModal(context,{String title, String content, String textActionCancel, String textActionSuccess, Function onCancel, Function onSuccess}){
+    showDialog(context: context,
+        child:AlertDialog(
+      title: Text(title),
+      content: content != null ? Text(content) : null,
+      actions: [
+        FlatButton(onPressed: onCancel, child: Text(textActionCancel),textColor: Colors.red,),
+        FlatButton(onPressed: onSuccess, child: Text(textActionSuccess),textColor: Colors.green,),
+      ],
+    ));
   }
 
   void showPurchaseFailed(PurchaseResultFailed purchaseResult) {

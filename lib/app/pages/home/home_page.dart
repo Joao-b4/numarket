@@ -116,6 +116,22 @@ class _HomePageState extends ModularState<HomePage, AppController> {
                       ],
                     ),
                   ),
+                  Flexible(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.redo,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              controller.loadUser();
+                            }),
+                      ],
+                    ),
+                  ),
                   SizedBox(
                     height: 20,
                   ),

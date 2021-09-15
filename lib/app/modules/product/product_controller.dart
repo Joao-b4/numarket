@@ -18,7 +18,6 @@ abstract class _ProductControllerBase with Store {
   @observable
   User customer;
 
-
   @observable
   Product product;
 
